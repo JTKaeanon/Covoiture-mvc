@@ -1,0 +1,17 @@
+{
+    "name": "arzak/covoiturage-mvc",
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Jessie Texier",
+            "email": "jessitexier8@gmail.com"
+        }
+    ],
+    "require": {
+        "altorouter/altorouter": "^2.0"
+    }
+}
