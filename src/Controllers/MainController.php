@@ -1,28 +1,19 @@
 <?php
-
 namespace App\Controllers;
 
-use App\Models\Database;
-use PDO;
+use App\Models\Trip; // On importe le modèle
 
 class MainController {
     
-    // Méthode pour la page d'accueil
     public function home() {
-        // Testons la connexion à la BDD pour être sûr
-        $db = new Database();
-        $connexion = $db->getPDO();
+        // 1. On instancie le modèle
+        $tripModel = new Trip();
         
-        // On prépare un petit message de test
-        $message = "Bienvenue sur Touche pas au klaxon !";
-        if($connexion) {
-            $status_bdd = "Connexion BDD : OK ✅";
-        } else {
-            $status_bdd = "Connexion BDD : ERREUR ❌";
-        }
-
-        // On inclut la vue (l'affichage)
-        // __DIR__ est le dossier actuel, on remonte pour aller chercher /views
+        // 2. On récupère les données
+        $trips = $tripModel->findAll();
+        
+        // 3. On envoie les données à la vue
+        // La variable $trips sera accessible directement dans home.php
         require __DIR__ . '/../../views/home.php';
     }
 }
