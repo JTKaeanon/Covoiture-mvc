@@ -1,0 +1,28 @@
+<?php
+namespace App\Models;
+
+use PDO;
+
+class Trip extends Database {
+
+    // Récupérer tous les trajets avec les noms des villes et du conducteur
+    public function findAll() {
+        $pdo = $this->getPDO();
+        
+        $sql = "
+            SELECT 
+                t.*, 
+                u.firstname, u.lastname,
+                dep.name AS departure_city,
+                arr.name AS arrival_city
+            FROM trip t
+            INNER JOIN user u ON t.driver_id = u.id
+            INNER JOIN agency dep ON t.departure_agency_id = dep.id
+            INNER JOIN agency arr ON t.arrival_agency_id = arr.id
+            ORDER BY t.date_trip ASC
+        ";
+
+        $stmt = $pdo->query($sql);
+        return $stmt->fetchAll();
+    }
+}
