@@ -25,4 +25,23 @@ class Trip extends Database {
         $stmt = $pdo->query($sql);
         return $stmt->fetchAll();
     }
+
+    // --- NOUVELLE MÉTHODE A INTÉGRER ---
+    // Créer un nouveau trajet
+    public function create($driver_id, $dep_id, $arr_id, $date, $time, $price, $seats) {
+        $pdo = $this->getPDO();
+        $sql = "INSERT INTO trip (driver_id, departure_agency_id, arrival_agency_id, date_trip, time_trip, price, available_seats) 
+                VALUES (:driver, :dep, :arr, :date, :time, :price, :seats)";
+        
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([
+            'driver' => $driver_id,
+            'dep' => $dep_id,
+            'arr' => $arr_id,
+            'date' => $date,
+            'time' => $time,
+            'price' => $price,
+            'seats' => $seats
+        ]);
+    }
 }
