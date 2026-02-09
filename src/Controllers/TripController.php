@@ -6,58 +6,63 @@ use App\Models\Database;
 
 class TripController {
     
-    // 1. Affiche le formulaire d'ajout
+    // Formulaire d'ajout
     public function addForm() {
-        if (!isset($_SESSION['user'])) {
-            header('Location: /login');
+        if (!isset($_SESSION['user'])) { header('Location: /login'); exit; }
+        $db = new Database();
+        $pdo = $db->getPDO();
+        $stmt = $pdo->query("SELECT * FROM agency ORDER BY name ASC");
+        $agencies = $stmt->fetchAll();
+        require __DIR__ . '/../../views/trip_add.php';
+    }
+
+    // Traitement de l'ajout
+    public function add() {
+        if (!isset($_SESSION['user'])) { header('Location: /login'); exit; }
+        $tripModel = new Trip();
+        $tripModel->create($_SESSION['user']['id'], $_POST['departure'], $_POST['arrival'], $_POST['date'], $_POST['time'], $_POST['price'], $_POST['seats']);
+        header('Location: /');
+        exit;
+    }
+
+    // Suppression
+    public function delete($id) {
+        if (!isset($_SESSION['user'])) { header('Location: /login'); exit; }
+        $tripModel = new Trip();
+        $tripModel->delete($id);
+        header('Location: /');
+        exit;
+    }
+
+    // --- NOUVEAU : Formulaire de modification ---
+    public function editForm($id) {
+        if (!isset($_SESSION['user'])) { header('Location: /login'); exit; }
+
+        $tripModel = new Trip();
+        $trip = $tripModel->find($id);
+
+        // Si le trajet n'existe pas ou n'appartient pas à l'utilisateur, on redirige
+        if (!$trip || $trip['driver_id'] != $_SESSION['user']['id']) {
+            header('Location: /');
             exit;
         }
 
-        // On récupère la liste des villes pour le menu déroulant
+        // On récupère les villes
         $db = new Database();
         $pdo = $db->getPDO();
         $stmt = $pdo->query("SELECT * FROM agency ORDER BY name ASC");
         $agencies = $stmt->fetchAll();
 
-        require __DIR__ . '/../../views/trip_add.php';
+        require __DIR__ . '/../../views/trip_edit.php';
     }
 
-    // 2. Traite l'ajout du trajet
-    public function add() {
-        if (!isset($_SESSION['user'])) {
-            header('Location: /login');
-            exit;
-        }
-
-        $driver_id = $_SESSION['user']['id'];
-        $departure = $_POST['departure'];
-        $arrival = $_POST['arrival'];
-        $date = $_POST['date'];
-        $time = $_POST['time'];
-        $price = $_POST['price'];
-        $seats = $_POST['seats'];
-
+    // --- NOUVEAU : Traitement de la modification ---
+    public function edit($id) {
+        if (!isset($_SESSION['user'])) { header('Location: /login'); exit; }
+        
         $tripModel = new Trip();
-        $tripModel->create($driver_id, $departure, $arrival, $date, $time, $price, $seats);
-
-        header('Location: /');
-        exit;
-    }
-
-    // --- NOUVELLE MÉTHODE ---
-    // 3. Supprimer un trajet
-    public function delete($id) {
-        // Sécurité : Si pas connecté, on renvoie au login
-        if (!isset($_SESSION['user'])) {
-            header('Location: /login');
-            exit;
-        }
-
-        // Suppression via le modèle
-        $tripModel = new Trip();
-        $tripModel->delete($id);
-
-        // Retour à l'accueil
+        $tripModel->update($id, $_POST['departure'], $_POST['arrival'], $_POST['date'], $_POST['time'], $_POST['price'], $_POST['seats']);
+        
         header('Location: /');
         exit;
     }

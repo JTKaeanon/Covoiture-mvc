@@ -22,15 +22,12 @@
 
     <div class="header-custom">
         <h3 class="m-0">Touche pas au klaxon</h3>
-        
         <div>
             <?php if(isset($_SESSION['user'])): ?>
                 <span class="me-3 fw-bold">Bonjour <?= htmlspecialchars($_SESSION['user']['firstname']) ?> !</span>
-                
                 <?php if(isset($_SESSION['user']['roles']) && in_array('ROLE_ADMIN', $_SESSION['user']['roles'])): ?>
                     <span class="badge bg-danger me-2">Admin</span>
                 <?php endif; ?>
-
                 <a href="/logout" class="btn btn-outline-danger btn-sm">Déconnexion</a>
             <?php else: ?>
                 <a href="/login" class="btn btn-dark">Connexion</a>
@@ -40,9 +37,7 @@
 
     <?php if(isset($_SESSION['user'])): ?>
         <div class="mb-3 text-end">
-            <a href="/trip/add" class="btn btn-success">
-                <i class="bi bi-plus-circle"></i> Ajouter un trajet
-            </a>
+            <a href="/trip/add" class="btn btn-success"><i class="bi bi-plus-circle"></i> Ajouter un trajet</a>
         </div>
     <?php else: ?>
         <h4 class="mb-4">Pour obtenir plus d'informations sur un trajet, veuillez vous connecter</h4>
@@ -52,14 +47,7 @@
         <table class="table table-striped table-hover text-center align-middle">
             <thead class="table-dark">
                 <tr>
-                    <th>Départ</th>
-                    <th>Date</th>
-                    <th>Heure</th>
-                    <th>Destination</th>
-                    <th>Date</th>
-                    <th>Heure</th>
-                    <th>Places</th>
-                    <th>Actions</th>
+                    <th>Départ</th><th>Date</th><th>Heure</th><th>Destination</th><th>Date</th><th>Heure</th><th>Places</th><th>Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -72,9 +60,11 @@
                     <td><?= date('d/m/Y', strtotime($trip['date_trip'])) ?></td>
                     <td><?= date('H:i', strtotime($trip['time_trip']) + 7200) ?></td>
                     <td><?= htmlspecialchars($trip['available_seats']) ?></td>
-                    
                     <td>
                         <?php if(isset($_SESSION['user'])): ?>
+                            <a href="/trip/edit/<?= $trip['id'] ?>" class="text-warning mx-1" title="Modifier">
+                                <i class="bi bi-pencil-square"></i>
+                            </a>
                             <a href="/trip/delete/<?= $trip['id'] ?>" class="text-danger mx-1" onclick="return confirm('Supprimer ce trajet ?')">
                                 <i class="bi bi-trash-fill"></i>
                             </a>
@@ -82,15 +72,11 @@
                             <i class="text-muted bi bi-eye-fill" title="Connectez-vous pour voir"></i>
                         <?php endif; ?>
                     </td>
-                    </tr>
+                </tr>
                 <?php endforeach; ?>
             </tbody>
         </table>
     </div>
-
-    <footer class="text-center mt-5 text-muted">
-        © 2024 - CENEF - MVC PHP
-    </footer>
-
+    <footer class="text-center mt-5 text-muted">© 2024 - CENEF - MVC PHP</footer>
 </body>
 </html>
