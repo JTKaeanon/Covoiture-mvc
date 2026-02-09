@@ -21,10 +21,14 @@ $router->map('POST', '/login', 'App\Controllers\AuthController#login', 'login_pr
 // Déconnexion
 $router->map('GET', '/logout', 'App\Controllers\AuthController#logout', 'logout');
 
-// --- NOUVELLES ROUTES A INTÉGRER ---
-// Ajouter un trajet
+// Trajets (Ajout)
 $router->map('GET', '/trip/add', 'App\Controllers\TripController#addForm', 'trip_add_form');
 $router->map('POST', '/trip/add', 'App\Controllers\TripController#add', 'trip_add_process');
+
+// --- NOUVELLE ROUTE ---
+// Trajets (Suppression)
+$router->map('GET', '/trip/delete/[i:id]', 'App\Controllers\TripController#delete', 'trip_delete');
+
 
 // --- FIN DES ROUTES ---
 

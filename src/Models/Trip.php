@@ -26,7 +26,6 @@ class Trip extends Database {
         return $stmt->fetchAll();
     }
 
-    // --- NOUVELLE MÉTHODE A INTÉGRER ---
     // Créer un nouveau trajet
     public function create($driver_id, $dep_id, $arr_id, $date, $time, $price, $seats) {
         $pdo = $this->getPDO();
@@ -43,5 +42,14 @@ class Trip extends Database {
             'price' => $price,
             'seats' => $seats
         ]);
+    }
+
+    // --- NOUVELLE MÉTHODE ---
+    // Supprimer un trajet
+    public function delete($id) {
+        $pdo = $this->getPDO();
+        $sql = "DELETE FROM trip WHERE id = :id";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute(['id' => $id]);
     }
 }
