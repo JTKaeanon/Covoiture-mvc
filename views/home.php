@@ -35,6 +35,7 @@
         </div>
         <?php unset($_SESSION['error']); ?>
     <?php endif; ?>
+
     <div class="header-custom">
         <h3 class="m-0">Touche pas au klaxon</h3>
         <div>
@@ -77,6 +78,11 @@
                     <td><?= htmlspecialchars($trip['available_seats']) ?></td>
                     <td>
                         <?php if(isset($_SESSION['user'])): ?>
+                            
+                            <button type="button" class="btn btn-sm text-primary mx-1" data-bs-toggle="modal" data-bs-target="#modalTrip<?= $trip['id'] ?>" title="Détails du conducteur">
+                                <i class="bi bi-eye-fill"></i>
+                            </button>
+
                             <?php if($trip['driver_id'] == $_SESSION['user']['id']): ?>
                                 <a href="/trip/edit/<?= $trip['id'] ?>" class="text-warning mx-1" title="Modifier">
                                     <i class="bi bi-pencil-square"></i>
@@ -84,14 +90,37 @@
                                 <a href="/trip/delete/<?= $trip['id'] ?>" class="text-danger mx-1" onclick="return confirm('Supprimer ce trajet ?')">
                                     <i class="bi bi-trash-fill"></i>
                                 </a>
-                            <?php else: ?>
-                                <small class="text-muted">Pas d'action</small>
                             <?php endif; ?>
+                            
                         <?php else: ?>
                             <i class="text-muted bi bi-eye-fill" title="Connectez-vous pour voir"></i>
                         <?php endif; ?>
                     </td>
                 </tr>
+
+                <div class="modal fade" id="modalTrip<?= $trip['id'] ?>" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header bg-dark text-white">
+                                <h5 class="modal-title">Détails du trajet</h5>
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body text-start">
+                                <p><strong>Conducteur :</strong> <?= htmlspecialchars($trip['firstname'] . ' ' . $trip['lastname']) ?></p>
+                                <hr>
+                                <p><i class="bi bi-envelope-fill me-2"></i> <?= htmlspecialchars($trip['email']) ?></p>
+                                <p><i class="bi bi-telephone-fill me-2"></i> <?= htmlspecialchars($trip['phone']) ?></p>
+                                <hr>
+                                <div class="alert alert-info mb-0">
+                                    <small>Il reste <strong><?= $trip['available_seats'] ?></strong> places disponibles pour ce trajet.</small>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <?php endforeach; ?>
                 
                 <?php if(empty($trips)): ?>
