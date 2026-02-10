@@ -20,6 +20,21 @@
 </head>
 <body class="container py-4">
 
+    <?php if(isset($_SESSION['success'])): ?>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="bi bi-check-circle-fill me-2"></i> <?= $_SESSION['success'] ?>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <?php unset($_SESSION['success']); ?>
+    <?php endif; ?>
+
+    <?php if(isset($_SESSION['error'])): ?>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i> <?= $_SESSION['error'] ?>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <?php unset($_SESSION['error']); ?>
+    <?php endif; ?>
     <div class="header-custom">
         <h3 class="m-0">Touche pas au klaxon</h3>
         <div>
@@ -62,21 +77,31 @@
                     <td><?= htmlspecialchars($trip['available_seats']) ?></td>
                     <td>
                         <?php if(isset($_SESSION['user'])): ?>
-                            <a href="/trip/edit/<?= $trip['id'] ?>" class="text-warning mx-1" title="Modifier">
-                                <i class="bi bi-pencil-square"></i>
-                            </a>
-                            <a href="/trip/delete/<?= $trip['id'] ?>" class="text-danger mx-1" onclick="return confirm('Supprimer ce trajet ?')">
-                                <i class="bi bi-trash-fill"></i>
-                            </a>
+                            <?php if($trip['driver_id'] == $_SESSION['user']['id']): ?>
+                                <a href="/trip/edit/<?= $trip['id'] ?>" class="text-warning mx-1" title="Modifier">
+                                    <i class="bi bi-pencil-square"></i>
+                                </a>
+                                <a href="/trip/delete/<?= $trip['id'] ?>" class="text-danger mx-1" onclick="return confirm('Supprimer ce trajet ?')">
+                                    <i class="bi bi-trash-fill"></i>
+                                </a>
+                            <?php else: ?>
+                                <small class="text-muted">Pas d'action</small>
+                            <?php endif; ?>
                         <?php else: ?>
                             <i class="text-muted bi bi-eye-fill" title="Connectez-vous pour voir"></i>
                         <?php endif; ?>
                     </td>
                 </tr>
                 <?php endforeach; ?>
+                
+                <?php if(empty($trips)): ?>
+                    <tr><td colspan="8" class="text-muted py-4">Aucun trajet disponible pour le moment.</td></tr>
+                <?php endif; ?>
             </tbody>
         </table>
     </div>
+    
     <footer class="text-center mt-5 text-muted">© 2024 - CENEF - MVC PHP</footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
