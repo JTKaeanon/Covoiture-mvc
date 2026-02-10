@@ -41,8 +41,11 @@
         <div>
             <?php if(isset($_SESSION['user'])): ?>
                 <span class="me-3 fw-bold">Bonjour <?= htmlspecialchars($_SESSION['user']['firstname']) ?> !</span>
+                
                 <?php if(isset($_SESSION['user']['roles']) && in_array('ROLE_ADMIN', $_SESSION['user']['roles'])): ?>
-                    <span class="badge bg-danger me-2">Admin</span>
+                    <a href="/admin" class="btn btn-danger btn-sm me-2" title="Accéder à l'administration">
+                        <i class="bi bi-gear-fill"></i> Administration
+                    </a>
                 <?php endif; ?>
                 <a href="/logout" class="btn btn-outline-danger btn-sm">Déconnexion</a>
             <?php else: ?>
