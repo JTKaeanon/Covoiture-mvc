@@ -3,7 +3,7 @@ namespace App\Models;
 
 class User extends Database {
 
-    // Récupérer un utilisateur par son email (Login)
+    /** recup user par mail */
     public function findByEmail($email) {
         $pdo = $this->getPDO();
         $stmt = $pdo->prepare("SELECT * FROM user WHERE email = :email");
@@ -11,7 +11,7 @@ class User extends Database {
         return $stmt->fetch();
     }
 
-    // --- NOUVEAU : Récupérer TOUS les utilisateurs (Admin) ---
+    /** admin recup tout les users */
     public function findAll() {
         $pdo = $this->getPDO();
         $stmt = $pdo->query("SELECT * FROM user ORDER BY lastname ASC");

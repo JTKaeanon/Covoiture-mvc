@@ -1,15 +1,25 @@
 <?php
+
 use PHPUnit\Framework\TestCase;
 use App\Models\Trip;
 
+/**
+ * Test de la classe Trip
+ * On vérifie ici que la création d’un trajet fonctionne bien.
+ */
 class TripTest extends TestCase {
 
+    /**
+     * Test pour créer un trajet
+     * On crée un trajet puis on vérifie qu’il est bien enregistré en base.
+     */
     public function testCreateTrip() {
-        // 1. Instanciation du modèle
+        
+        /**  On crée une instance du modèle Trip */
         $tripModel = new Trip();
         
-        // 2. Données factices pour le test
-        $driverId = 3; // ID de l'admin (doit exister en BDD)
+        /** Données de test pour le trajet */
+        $driverId = 3;
         $depId = 1;
         $arrId = 2;
         $date = '2030-01-01';
@@ -17,20 +27,28 @@ class TripTest extends TestCase {
         $price = 50;
         $seats = 3;
 
-        // 3. Action : Création (Écriture en BDD)
+        /** On appelle la méthode create pour insérer le trajet */
         $tripModel->create($driverId, $depId, $arrId, $date, $time, $price, $seats);
 
-        // 4. Vérification : On relit la BDD pour voir si le trajet existe
+        /**  On récupère la connexion à la base */
         $pdo = $tripModel->getPDO();
+
+        /**  On vérifie que le trajet a bien été ajouté */
         $stmt = $pdo->prepare("SELECT * FROM trip WHERE date_trip = :date AND driver_id = :driver");
-        $stmt->execute(['date' => $date, 'driver' => $driverId]);
+        $stmt->execute([
+            'date' => $date, 
+            'driver' => $driverId
+        ]);
+
         $result = $stmt->fetch();
 
-        // On vérifie que le résultat n'est pas vide et que le prix correspond
-        $this->assertIsArray($result, "Le trajet aurait dû être créé en base de données.");
+        /**  On vérifie que la requête retourne bien un résultat */
+        $this->assertIsArray($result, "Le trajet n'a pas été créé correctement.");
+
+        /**  On vérifie que le prix correspond à celui qu’on a mis */
         $this->assertEquals($price, $result['price']);
 
-        // 5. Nettoyage : On supprime le trajet de test pour ne pas polluer la base
+        /**  On supprime le trajet créé pour ne pas laisser de données de test */
         if ($result) {
             $tripModel->delete($result['id']);
         }

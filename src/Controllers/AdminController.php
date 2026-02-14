@@ -7,21 +7,20 @@ use App\Models\User;
 
 class AdminController {
     
-    // Sécurité : Vérifie si Admin
+    /**  Sécurité : Vérifie si Admin */
     private function isAdmin() {
         if (!isset($_SESSION['user'])) return false;
         return in_array('ROLE_ADMIN', $_SESSION['user']['roles']);
     }
 
-    // Tableau de bord
+    /** Dashboard */
     public function dashboard() {
         if (!$this->isAdmin()) { header('Location: /'); exit; }
         require __DIR__ . '/../../views/admin/dashboard.php';
     }
 
-    // ========================
-    // GESTION DES AGENCES
-    // ========================
+    /** gestions agence */
+    
 
     public function listAgencies() {
         if (!$this->isAdmin()) { header('Location: /'); exit; }
@@ -65,9 +64,7 @@ class AdminController {
         exit;
     }
 
-    // ========================
-    // GESTION DES TRAJETS
-    // ========================
+    /** gestions trajets */
 
     public function listTrips() {
         if (!$this->isAdmin()) { header('Location: /'); exit; }
@@ -89,9 +86,8 @@ class AdminController {
         exit;
     }
 
-    // ========================
-    // GESTION DES UTILISATEURS
-    // ========================
+    /** Gestions users */
+
 
     public function listUsers() {
         if (!$this->isAdmin()) { header('Location: /'); exit; }

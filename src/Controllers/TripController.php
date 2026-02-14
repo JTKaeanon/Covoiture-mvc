@@ -6,9 +6,8 @@ use App\Models\Database;
 
 class TripController {
     
-    // --- PARTIE AJOUT ---
 
-    // 1. Formulaire d'ajout
+    /** formulaire ajout */
     public function addForm() {
         if (!isset($_SESSION['user'])) { header('Location: /login'); exit; }
 
@@ -20,15 +19,14 @@ class TripController {
         require __DIR__ . '/../../views/trip_add.php';
     }
 
-    // 2. Traitement de l'ajout
+
     public function add() {
         if (!isset($_SESSION['user'])) { header('Location: /login'); exit; }
 
-        // Vérification : Départ != Arrivée
+        /** vérification : départ != arrivée */
         if ($_POST['departure'] == $_POST['arrival']) {
             $_SESSION['error'] = "La ville de départ et d'arrivée doivent être différentes.";
             
-            // 🛑 CORRECTION ICI : On renvoie vers le formulaire "/trip/add", PAS vers l'accueil "/"
             header('Location: /trip/add'); 
             exit;
         }
@@ -41,7 +39,7 @@ class TripController {
         exit;
     }
 
-    // --- PARTIE SUPPRESSION ---
+    /** suppr trajet */
 
     public function delete($id) {
         if (!isset($_SESSION['user'])) { header('Location: /login'); exit; }
@@ -60,9 +58,8 @@ class TripController {
         exit;
     }
 
-    // --- PARTIE MODIFICATION ---
 
-    // 3. Formulaire de modification
+    /** modif trajet */
     public function editForm($id) {
         if (!isset($_SESSION['user'])) { header('Location: /login'); exit; }
 
@@ -83,20 +80,19 @@ class TripController {
         require __DIR__ . '/../../views/trip_edit.php';
     }
 
-    // 4. Traitement de la modification
+
     public function edit($id) {
         if (!isset($_SESSION['user'])) { header('Location: /login'); exit; }
         
-        // Vérification : Départ != Arrivée
+        /**  vérification : départ != arrivée */
         if ($_POST['departure'] == $_POST['arrival']) {
             $_SESSION['error'] = "La ville de départ et d'arrivée doivent être différentes.";
             
-            // 🛑 CORRECTION ICI : On renvoie vers l'édition "/trip/edit/...", PAS vers l'accueil
+
             header("Location: /trip/edit/$id"); 
             exit;
         }
 
-        // Vérification de sécurité
         $tripModel = new Trip();
         $trip = $tripModel->find($id);
         if ($trip['driver_id'] != $_SESSION['user']['id']) {

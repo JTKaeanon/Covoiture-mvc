@@ -5,7 +5,7 @@ use PDO;
 
 class Trip extends Database {
 
-    // Récupérer les trajets pour l'ACCUEIL (Filtre : Futurs + Places dispo)
+    /** recup trajet pour accueil */ 
     public function findAll() {
         $pdo = $this->getPDO();
         $sql = "
@@ -26,10 +26,10 @@ class Trip extends Database {
         return $stmt->fetchAll();
     }
 
-    // --- NOUVEAU : Récupérer les trajets pour l'ADMIN (Tout voir, même complets) ---
+    /** trajet visible par admin, tous même complet */
     public function findAllForAdmin() {
         $pdo = $this->getPDO();
-        // On retire la condition "available_seats > 0"
+        
         $sql = "
             SELECT 
                 t.*, 
@@ -47,7 +47,7 @@ class Trip extends Database {
         return $stmt->fetchAll();
     }
 
-    // Créer un nouveau trajet
+    /** creer nouveau trajet */
     public function create($driver_id, $dep_id, $arr_id, $date, $time, $price, $seats) {
         $pdo = $this->getPDO();
         $sql = "INSERT INTO trip (driver_id, departure_agency_id, arrival_agency_id, date_trip, time_trip, price, available_seats) 
@@ -60,7 +60,7 @@ class Trip extends Database {
         ]);
     }
 
-    // Supprimer un trajet
+    /** suppr trajet */
     public function delete($id) {
         $pdo = $this->getPDO();
         $sql = "DELETE FROM trip WHERE id = :id";
@@ -68,7 +68,7 @@ class Trip extends Database {
         $stmt->execute(['id' => $id]);
     }
 
-    // Récupérer un seul trajet
+    /**recup 1 trajet */
     public function find($id) {
         $pdo = $this->getPDO();
         $stmt = $pdo->prepare("SELECT * FROM trip WHERE id = :id");
@@ -76,7 +76,7 @@ class Trip extends Database {
         return $stmt->fetch();
     }
 
-    // Mettre à jour un trajet
+    /** update trajet */
     public function update($id, $dep_id, $arr_id, $date, $time, $price, $seats) {
         $pdo = $this->getPDO();
         $sql = "UPDATE trip SET 
