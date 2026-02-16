@@ -50,7 +50,7 @@ Installez les bibliothèques nécessaires (AltoRouter, PHPUnit...) :
 composer install
 ```
 
-###### 4. 4. Configuration de la Base de Données
+###### 4. Configuration de la Base de Données
 Ouvrez votre gestionnaire de base de données (ex: PhpMyAdmin).
 
 Créez une nouvelle base de données nommée : covoiturage_mvc.
@@ -66,20 +66,20 @@ Par défaut configuré sur : User root, sans mot de passe, Port 3307.
 Si vous utilisez XAMPP/WAMP standard, changez le port pour 3306.
 
 
-###### 6. Lancement du serveur 
+###### 5. Lancement du serveur 
 Ouvrez un terminal à la racine du projet et lancez le serveur interne de PHP :
 ``` bash
 php -S localhost:8000 -t public
 ```
 Rendez-vous ensuite sur votre navigateur à l'adresse : http://localhost:8000
 
-Identifiants de test
+###### 6.1 Identifiants de test
 Pour tester l'application immédiatement, vous pouvez utiliser ces comptes pré-configurés :
 
 Administrateur             admin@klaxon.fr                   123456 | 
 Utilisateur                sophie.dubois@email.fr            123456
 
-Tests
+###### 6.2 Tests
 
 Analyse Statique (PHPStan)
 ``` bash
